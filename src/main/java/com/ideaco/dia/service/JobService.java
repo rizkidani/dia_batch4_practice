@@ -55,4 +55,73 @@ public class JobService {
 
         return data;
     }
+
+    public JobModel postCreateJob(String jobName, String jobDesc, int jobSalary) {
+        JobModel jobModel = new JobModel();
+        jobModel.setJobName(jobName);
+        jobModel.setJobDesc(jobDesc);
+        jobModel.setJobSalary(jobSalary);
+
+        return jobRepository.save(jobModel);
+    }
+
+    public JobModel postCreateJobWithBody(JobModel jobModel) {
+        return jobRepository.save(jobModel);
+    }
+
+    public List<JobModel> postCreateJobWithBodyMultiple(List<JobModel> jobModels) {
+        return jobRepository.saveAll(jobModels);
+    }
+
+    public JobModel putUpdateJobWithParams(int jobId, String jobName, String jobDesc, int jobSalary) {
+        Optional<JobModel> jobModelOptional = jobRepository.findById(jobId);
+
+        if (jobModelOptional.isEmpty()){
+            return null;
+        }
+
+        JobModel jobModel = jobModelOptional.get();
+        jobModel.setJobName(jobName);
+        jobModel.setJobDesc(jobDesc);
+        jobModel.setJobSalary(jobSalary);
+
+        return jobRepository.save(jobModel);
+    }
+    public JobModel putUpdateJobWithBody(JobModel jobModel) {
+        int jobId = jobModel.getJobId();
+        Optional<JobModel> jobModelOptional = jobRepository.findById(jobId);
+
+        if (jobModelOptional.isEmpty()){
+            return null;
+        }
+
+        return jobRepository.save(jobModel);
+    }
+
+    public JobModel patchUpdateJobWithParams(int jobId, String jobName) {
+        Optional<JobModel> jobModelOptional = jobRepository.findById(jobId);
+
+        if (jobModelOptional.isEmpty()) {
+            return null;
+        }
+
+        JobModel jobModel = jobModelOptional.get();
+        jobModel.setJobName(jobName);
+
+        return jobRepository.save(jobModel);
+    }
+
+    public boolean deleteJob(int jobId) {
+        Optional<JobModel> jobModelOptional = jobRepository.findById(jobId);
+
+        if (jobModelOptional.isEmpty()) {
+            return false;
+        }
+
+        // Option 1
+//        jobRepository.delete(jobModelOptional.get());
+        // Option 2
+        jobRepository.deleteById(jobId);
+        return true;
+    }
 }
