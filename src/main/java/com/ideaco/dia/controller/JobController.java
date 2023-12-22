@@ -3,6 +3,7 @@ package com.ideaco.dia.controller;
 import com.ideaco.dia.model.JobModel;
 import com.ideaco.dia.service.FileService;
 import com.ideaco.dia.service.JobService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,8 +14,13 @@ import java.util.Optional;
 @RequestMapping("/api/v1/job")
 public class JobController {
 
-    private final JobService jobService;
-    private final FileService fileService;
+//    @Autowired
+//    private JobService jobService;
+//    @Autowired
+//    private FileService fileService;
+
+    private JobService jobService;
+    private FileService fileService;
 
     public JobController(JobService jobService, FileService fileService) {
         this.jobService = jobService;
