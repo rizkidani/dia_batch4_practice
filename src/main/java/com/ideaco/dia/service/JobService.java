@@ -178,12 +178,12 @@ public class JobService {
         if (data.isEmpty()) {
             jobResponse.setCode("01");
             jobResponse.setMessage("Data not found");
-            jobResponse.setJobDTO(null);
+            jobResponse.setData(null);
         } else {
             jobResponse.setCode("02");
             jobResponse.setMessage("Success");
 
-            jobResponse.setJobDTO(data.stream().map(this::convertDTO).collect(Collectors.toList()));
+            jobResponse.setData(data.stream().map(this::convertDTO).collect(Collectors.toList()));
         }
 
         return jobResponse;
