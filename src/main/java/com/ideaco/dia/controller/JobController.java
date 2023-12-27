@@ -1,6 +1,9 @@
 package com.ideaco.dia.controller;
 
+import com.ideaco.dia.dto.JobDTO;
 import com.ideaco.dia.model.JobModel;
+import com.ideaco.dia.response.HandlerResponse;
+import com.ideaco.dia.response.JobResponse;
 import com.ideaco.dia.service.FileService;
 import com.ideaco.dia.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ public class JobController {
         this.jobService = jobService;
         this.fileService = fileService;
     }
+
+    /* --------------------- GET ------------------ */
 
     @GetMapping("/data")
     public String getData() {
@@ -86,6 +91,8 @@ public class JobController {
         return data;
     }
 
+    /* --------------------- POST ------------------ */
+
     @PostMapping("/createJobWithParams")
     public JobModel postCreateJob(@RequestParam("jobName") String jobName,
                                   @RequestParam("jobDesc") String jobDesc,
@@ -105,6 +112,8 @@ public class JobController {
         return jobService.postCreateJobWithBodyMultiple(jobModels);
     }
 
+    /* --------------------- PUT ------------------ */
+
     @PutMapping("/updateJobWithParams")
     public JobModel putUpdateJobWithParams(@RequestParam("jobId") int jobId,
                                  @RequestParam("jobName") String jobName,
@@ -118,11 +127,15 @@ public class JobController {
         return jobService.putUpdateJobWithBody(jobModel);
     }
 
+    /* --------------------- PATCH ------------------ */
+
     @PatchMapping("/updateJobWithParamsPatch")
     public JobModel patchUpdateJobWithParamsPatch(@RequestParam("jobId") int jobId,
                                                   @RequestParam("jobName") String jobName) {
         return jobService.patchUpdateJobWithParams(jobId, jobName);
     }
+
+    /* --------------------- DELETE ------------------ */
 
     @DeleteMapping("/deleteJob")
     public String deleteJob(@RequestParam("jobId") int jobId) {
@@ -135,8 +148,47 @@ public class JobController {
         }
     }
 
+    /* --------------------- POST MULTIPART ------------------ */
+
     @PostMapping("/uploadFile")
     public boolean uploadJobImage(@RequestParam("file") MultipartFile file) {
         return fileService.saveFile(file);
+    }
+
+    /* --------------------- DTO ------------------ */
+
+    @GetMapping("/dataWithDTO")
+    public JobDTO dataWithDTO(@RequestParam("jobId") int jobId) {
+        return jobService.dataWithDTO(jobId);
+    }
+
+    @GetMapping("/dataListWithDTO")
+    public List<JobDTO> dataListWithDTO() {
+        return jobService.dataListWithDTO();
+    }
+
+    @PostMapping("/createJobWithResponseData")
+    public HandlerResponse createJobWithResponseData(@RequestParam("jobName") String jobName,
+                                                     @RequestParam("jobDesc") String jobDesc,
+                                                     @RequestParam("jobSalary") int jobSalary) {
+        HandlerResponse data = jobService.postCreateJobWithHandlerResponse(jobName, jobDesc, jobSalary);
+
+        try {
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            HandlerResponse response = new HandlerResponse();
+            response.setCode("02");
+            response.setMessage("Error!");
+            return response;
+        }
+    }
+
+    @GetMapping("/dataListWithResponseData")
+    public JobResponse dataListWithResponseData() {
+        JobResponse data = jobService.getListJobWithHandlerResponse();
+
+        return data;
     }
 }
